@@ -1,8 +1,13 @@
 <style lang="scss">
-	// Setting font
-    @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap');
-    * {font-family: 'Josefin Sans', sans-serif;}
+	@-webkit-keyframes slidein {
+		from {background-position: top; background-size:3000px; }
+		to {background-position: -100px 0px;background-size:2750px;}
+	}
 
+	@keyframes slidein {
+		from {background-position: top;background-size:3000px; }
+		to {background-position: -100px 0px;background-size:2750px;}
+	}
 
     $color: rgb(171, 49, 49);
     $bg1: #1f2933;
@@ -12,6 +17,22 @@
         height: 100%;
 		min-height: 100vh;
         display: flex; align-items: center; justify-content: center;
+
+		
+        background: linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url('../images/pexels-photo-450055.jpeg');
+    
+  		background-size: contain;
+        -webkit-animation: slidein 50s;
+        animation: slidein 50s;
+
+        -webkit-animation-fill-mode: forwards;
+        animation-fill-mode: forwards;
+
+        -webkit-animation-iteration-count: infinite;
+        animation-iteration-count: infinite;
+
+        -webkit-animation-direction: alternate;
+        animation-direction: alternate;              
 
 		// Visible and designed area with content in it
         form {
@@ -41,7 +62,8 @@
                 &:active {transform: translateY(-5px);}
             }
         }
-    }
+	}
+    
 
 // ========================================================================================= //
 // INPUT SECTION 	(NOT HOMEMADE)  	(DO NOT EDIT)										 //    
