@@ -14,6 +14,7 @@
 
         background-color: $color-1000;
         overflow-x: hidden;
+        
 
         .sidebar, .primary-area {
             height: 100%; min-height: 100vh;
@@ -26,6 +27,8 @@
             flex-direction: column;
             color: white;
             transition: 0.4s ease;flex: 0 1 auto;
+            position: fixed;
+            top: 0;
             
             .header-container {
                 display: flex;
@@ -52,14 +55,29 @@
 
         .primary-area {
             flex: 1 1 auto;
-            .textarea {
+            padding-top: 5rem;
+            padding-right: 5rem;
+            padding-left: calc(5rem + 40px + 4rem);
+            
+            textarea {
                 resize: none;
                 border: none;
                 outline: none;
-                margin: 5%;
-                width: 90%;
+                width: 100%;
+                font-family: 'Josefin Sans', sans-serif;
+                margin: 0;
+                border-top: 4px solid $color;
+                border-left: 4px solid $color;
+                border-right: 4px solid $color;
+                background-color: $color-1000;
+                color: whitesmoke;
+                padding: 1rem;
+                box-sizing: border-box;
+            }
 
-                
+            .save {
+                width: 4rem;
+                height: 2rem;
             }
         }
 
@@ -131,8 +149,70 @@
                 
             }
         });
+
+        function saveTextAsFile() {
+            // @ts-ignore
+            var textToWrite = document.querySelector('.textarea').value;
+            var textFileAsBlob = new Blob([ textToWrite ], { type: 'text/plain' });
+            console.log(textFileAsBlob)
+            var fileNameToSaveAs = "file.txt"; //filename.extension
+
+        //     var downloadLink = document.createElement("a");
+        //     downloadLink.download = fileNameToSaveAs;
+        //     downloadLink.innerHTML = "Download File";
+        //     if (window.webkitURL != null) {
+        //         // Chrome allows the link to be clicked without actually adding it to the DOM.
+        //         downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+        //     } else {
+        //         // Firefox requires the link to be added to the DOM before it can be clicked.
+        //         downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+        //         downloadLink.onclick = destroyClickedElement;
+        //         downloadLink.style.display = "none";
+        //         document.body.appendChild(downloadLink);
+        //     }
+
+        //     downloadLink.click();
+        }
+
+        // var button = document.querySelector('.save');
+        // // @ts-ignore
+        // button.addEventListener('click', saveTextAsFile);
+
+        // /**
+        //      * @param {{ target: any; }} event
+        // */
+        // function destroyClickedElement(event) {
+        // // remove the link from the DOM
+        // document.body.removeChild(event.target);
+        // }
+
+
+
     });
 
+
+    async function saveFileToBackend() {
+        // @ts-ignore
+        var textToWrite = document.querySelector('.textarea').value;
+        var textFileAsBlob = new Blob([ textToWrite ], { type: 'text/plain' });
+
+        
+
+        var fd = new FormData();
+        fd.append('upl', textFileAsBlob, 'blobby.txt');
+
+        
+		const response = await fetch("http://localhost:5171/savefile", {
+			method: 'POST',
+            // headers: {
+            //     'Accept': 'application/json',
+            //     'Content-Type': 'application/json'
+            // },
+            body: textFileAsBlob
+        });
+		const data = await response.json();
+	};
+    
     
     
 </script>
@@ -148,7 +228,6 @@
                     <div class="hamburger-inner"></div>
                 </div>
             </div>
-              
         </div>
 
         {#await promise then res}
@@ -159,6 +238,19 @@
         
     </div>  
     <div class="primary-area">
-        <textarea class="textarea" style="resize: none"></textarea>
+        <button class="save" on:click={saveFileToBackend}>save</button>
+        
+        <textarea class="textarea" style="resize: none" rows="30"></textarea>
+
+        <!-- 
+            TODO
+            1. Save contents of textarea into a file or something
+            2. Send the file to mongo or another db (or send raw text to mongo)
+            3. Load a file into the textarea
+            4. Overwrite the file with changes in the textarea
+        
+        
+        
+        -->
     </div>
 </div>
