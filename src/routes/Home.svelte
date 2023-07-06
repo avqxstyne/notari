@@ -1,18 +1,28 @@
 <style lang="scss">
 
-    $bg-color: #121212;
-    $color-1000: #10171e;
-    $color-900: #1F2933;
-    $color-800: #323F4B;
-    $color: rgb(171, 49, 49);
-    
+    // LIGHT MODE
+    $red-1: #601f1f;
+    $white-0: #FFFFFF;
+    $white-1: #eeeeee;
+    $white-2: #bfbfbf;
+    $middle: grey;
+    $text-color: black;
+
+    // DARK MODE
+
+    // $red-1: #9b2e2e;
+    // $white-0: #000000;
+    // $white-1: #111111;
+    // $white-2: #404040; 
+    // $middle: rgb(50, 48, 48);
+    // $text-color: white;
 
     .home-main {
         height: 100%;
 		min-height: 100vh;
         display: flex; align-items: center; 
 
-        background-color: $color-1000;
+        background-color: $white-1;
         overflow-x: hidden;
         
 
@@ -21,11 +31,11 @@
             
         } .sidebar {
             max-width: 234.6px;
-            background-color: $color-900;
+            background-color: $white-1;
             box-shadow: 10px 0 10px 0px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
-            color: white;
+            color: $text-color;
             transition: 0.4s ease;flex: 0 1 auto;
             position: fixed;
             top: 0;
@@ -41,16 +51,17 @@
                     &::after {
                         content: "";
                         width: 100%; height: 4px;
-                        background-color: $color;
+                        background-color: $red-1;
                         position: absolute;
                         bottom: -8px; left: 0px;
                     }
                 }
             }
             .sidebar-links {
-                transition: 0.5s ease;
+                transition: 0.3s ease;
                 padding: 0.5rem 2rem;
-                &:hover {background-color: rgba($color: #FFFFFF, $alpha: 0.3);}
+                background-color: $white-1;
+                &:hover {background-color: rgba($color: $white-2, $alpha: 0.3);}
 
                 
 
@@ -66,7 +77,7 @@
                     display: block;
                     font-family: inherit;
                     font-size: inherit;
-                    color: inherit;
+                    color: $text-color;
                     text-overflow: ellipsis;
 
                     /* Needed to make it work */
@@ -78,9 +89,12 @@
 
         .primary-area {
             flex: 1 1 auto;
-            padding-top: 5rem;
+            gap: 2rem;
+            padding-top: 2rem;
             padding-right: 5rem;
             padding-left: calc(5rem + 40px + 4rem);
+            display: flex;
+            flex-direction: column;
             
             textarea {
                 resize: none;
@@ -89,32 +103,65 @@
                 width: 100%;
                 font-family: 'Josefin Sans', sans-serif;
                 margin: 0;
-                border-top: 4px solid $color;
-                border-left: 4px solid $color;
-                border-right: 4px solid $color;
-                background-color: $color-1000;
-                color: whitesmoke;
+                border-top: 1px solid $middle;
+                border-left: 1px solid $middle;
+                border-right: 1px solid $middle;
+                background-color: $white-0;
+                color: $text-color;
                 padding: 1rem;
                 box-sizing: border-box;
             }
 
-            .save {
-                width: 4rem;
-                height: 2rem;
-            }
         }
 
         
     }
-</style>
 
+    .save {
+        background-color: transparent;
+        color: $text-color;
+
+        border-radius: 0.5rem;
+        border: none;
+        outline: none;
+        padding: 0.5rem 1.5rem;
+        font-size: 1rem;
+        font-family: inherit;
+
+        transition: 0.2s;
+        &:hover {
+            background-color: rgba($red-1, 0.4);
+        }
+
+    }
+
+    .textarea-controls {
+        padding: 0.25rem;
+        background-color: rgba($red-1, 0.2);
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+
+        input {
+            background-color: $white-1;
+            border-radius: 0.5rem;
+            padding: 0.25rem 0rem;
+            color: $text-color;
+            border: none;
+            outline: none;
+            // border-left: 2px solid $red-1;
+            font-size: 1rem;
+        }
+    }
+</style>
 
 <script >
     import { onMount } from "svelte";
 	
     
     // Sidebar links fetchers
-    async function getthesidebar() {
+    async function loadSidebarLinks() {
         const endpoint = "http://localhost:5171/getsidebar";
 
 		const response = await fetch(endpoint, {
@@ -131,7 +178,7 @@
 		
         return result;
 	};
-    let promise = getthesidebar();
+    let promise = loadSidebarLinks();
 
     // HAMBURGER
     onMount(() => {
@@ -261,11 +308,19 @@
                 notename: element
             })
 		})
+        const data = await response.text();
+
+        let textarea = document.querySelector('.textarea');
+
+        // @ts-ignore
+        textarea.value = data;
     }
     
+    async function updateNote() {
+
+    }
     
 </script>
-
 
 <div class="home-main">
     <div class="sidebar">
@@ -279,6 +334,10 @@
             </div>
         </div>
 
+        <!-- SIDEBAR -->
+        <!-- A svelte loop lays out each html element by seeing how many elements are in the data
+        base and representing them (promise is the result of getthesidebar() function).
+        When each link is clicked it loads the corresponding note -->
         {#await promise then res}
             {#each res as el}
                 <div class="sidebar-links">
@@ -288,12 +347,16 @@
                 </div>
             {/each}
         {/await}
+        <!-- SIDEBAR -->
         
     </div>  
     <div class="primary-area">
-        <button class="save">overwrite existing note</button>
-        <button class="save" on:click={addNewNote}>add new note</button>
-        <input placeholder="New note name: " class="note-name">
+
+        <div class="textarea-controls">
+            <button class="save">Save</button>
+            <button class="save" on:click={addNewNote}>Add</button>
+            <input placeholder="Name: " class="note-name">
+        </div>
         
         <textarea class="textarea" style="resize: none" rows="30"></textarea>
 
