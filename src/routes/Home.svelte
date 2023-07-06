@@ -20,7 +20,7 @@
             height: 100%; min-height: 100vh;
             
         } .sidebar {
-            width: fit-content;
+            max-width: 234.6px;
             background-color: $color-900;
             box-shadow: 10px 0 10px 0px rgba(0, 0, 0, 0.5);
             display: flex;
@@ -29,6 +29,7 @@
             transition: 0.4s ease;flex: 0 1 auto;
             position: fixed;
             top: 0;
+            
             
             .header-container {
                 display: flex;
@@ -50,6 +51,28 @@
                 transition: 0.5s ease;
                 padding: 0.5rem 2rem;
                 &:hover {background-color: rgba($color: #FFFFFF, $alpha: 0.3);}
+
+                
+
+                button {
+                    width: 100%;
+                    max-width: 100%;
+                    text-align: left;
+
+                    appearance: none;
+                    border: none;
+                    background-color: transparent;
+                    outline: none;
+                    display: block;
+                    font-family: inherit;
+                    font-size: inherit;
+                    color: inherit;
+                    text-overflow: ellipsis;
+
+                    /* Needed to make it work */
+                    overflow: hidden;
+                    white-space: nowrap;
+                }
             }
         }
 
@@ -89,9 +112,11 @@
 <script >
     import { onMount } from "svelte";
 	
-    const endpoint = "http://localhost:5171/getsidebar";
+    
+    // Sidebar links fetchers
+    async function getthesidebar() {
+        const endpoint = "http://localhost:5171/getsidebar";
 
-    async function loginSubmitToBackend() {
 		const response = await fetch(endpoint, {
 			method: 'GET',
 			headers: { 'Content-Type': 'application/json'}
@@ -106,8 +131,7 @@
 		
         return result;
 	};
-
-    let promise = loginSubmitToBackend();
+    let promise = getthesidebar();
 
     // HAMBURGER
     onMount(() => {
@@ -190,19 +214,16 @@
 
     });
 
-
-    async function saveFileToBackend() {
+    async function addNewNote() {
         // @ts-ignore
         var textToWrite = document.querySelector('.textarea').value;
+        // @ts-ignore
+        var noteName = document.querySelector('.note-name').value;
         var textFileAsBlob = new Blob([ textToWrite ], { type: 'text/plain' });
-
+        var myname = "grayson";
+        var id = 1;
         
-
-        var fd = new FormData();
-        fd.append('upl', textFileAsBlob, 'blobby.txt');
-
-        
-		const response = await fetch("http://localhost:5171/savefile", {
+		const blobSender = await fetch("http://localhost:5171/addnewnote/blob", {
 			method: 'POST',
             // headers: {
             //     'Accept': 'application/json',
@@ -210,9 +231,37 @@
             // },
             body: textFileAsBlob
         });
-		const data = await response.json();
+		// const data = await blobSender.json();
+        // console.log(data)
+        const credentialSender = await fetch("http://localhost:5171/addnewnote/credentials", {
+			method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userName: myname,
+                fileName: noteName
+            })
+        });
 	};
     
+    // @ts-ignore
+    async function loadNoteFromMongo(element) {
+        const endpoint = "http://localhost:5171/findnote";
+
+        console.log('function fired')
+
+        console.log(element)
+
+        const response = await fetch(endpoint, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                notename: element
+            })
+		})
+    }
     
     
 </script>
@@ -232,13 +281,19 @@
 
         {#await promise then res}
             {#each res as el}
-                <div class="sidebar-links">{el[1]}</div>
+                <div class="sidebar-links">
+                    <button on:click={() => {loadNoteFromMongo(el[1])}}>
+                        {el[1]}
+                    </button>
+                </div>
             {/each}
         {/await}
         
     </div>  
     <div class="primary-area">
-        <button class="save" on:click={saveFileToBackend}>save</button>
+        <button class="save">overwrite existing note</button>
+        <button class="save" on:click={addNewNote}>add new note</button>
+        <input placeholder="New note name: " class="note-name">
         
         <textarea class="textarea" style="resize: none" rows="30"></textarea>
 
