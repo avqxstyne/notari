@@ -268,24 +268,13 @@
         var noteName = document.querySelector('.note-name').value;
         var textFileAsBlob = new Blob([ textToWrite ], { type: 'text/plain' });
         var myname = "grayson";
-        var id = 1;
         
 		const blobSender = await fetch("http://localhost:5171/addnewnote/blob", {
-			method: 'POST',
-            // headers: {
-            //     'Accept': 'application/json',
-            //     'Content-Type': 'application/json'
-            // },
-            body: textFileAsBlob
+			method: 'POST',body: textFileAsBlob
         });
-		// const data = await blobSender.json();
-        // console.log(data)
         const credentialSender = await fetch("http://localhost:5171/addnewnote/credentials", {
 			method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
+            headers: {'Accept': 'application/json','Content-Type': 'application/json'},
             body: JSON.stringify({
                 userName: myname,
                 fileName: noteName
@@ -294,30 +283,55 @@
 	};
     
     // @ts-ignore
-    async function loadNoteFromMongo(element) {
+    async function loadNoteFromMongo(elementParam) {
+
+        // Fetching the text
         const endpoint = "http://localhost:5171/findnote";
-
-        console.log('function fired')
-
-        console.log(element)
-
         const response = await fetch(endpoint, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                notename: element
-            })
-		})
+			method: 'POST',headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({ notename: elementParam })
+        });
+        // Loading it into the textarea
         const data = await response.text();
-
         let textarea = document.querySelector('.textarea');
-
         // @ts-ignore
         textarea.value = data;
+
+        // when button clicked, it get .note-is-loaded, and all others go back to not loaded.)
+        const sidebarLinks = document.getElementsByClassName("sidebar-links");
+        for (let i = 0; i < sidebarLinks.length; i++) {
+            if (sidebarLinks[i].classList.contains("note-is-loaded")) {
+                sidebarLinks[i].classList.remove("note-is-loaded");
+                sidebarLinks[i].classList.add("note-not-loaded")
+            }
+            // @ts-ignore
+            if (sidebarLinks[i].innerText == elementParam) {
+                sidebarLinks[i].classList.remove("note-not-loaded")
+                sidebarLinks[i].classList.add("note-is-loaded");
+            }
+        }
     }
     
     async function updateNote() {
+        // @ts-ignore
+        var textToWrite = document.querySelector('.textarea').value;
+        var textFileAsBlob = new Blob([ textToWrite ], { type: 'text/plain' });
 
+        // @ts-ignore
+        var noteName = document.querySelector('.note-is-loaded').innerText;
+        var myname = "grayson";
+        
+		const blobSender = await fetch("http://localhost:5171/updatenote/blob", {
+			method: 'POST', body: textFileAsBlob
+        });
+        const credentialSender = await fetch("http://localhost:5171/updatenote/credentials", {
+			method: 'POST',
+            headers: {'Accept': 'application/json','Content-Type': 'application/json'},
+            body: JSON.stringify({
+                userName: myname,
+                fileName: noteName
+            })
+        });
     }
     
 </script>
@@ -340,7 +354,7 @@
         When each link is clicked it loads the corresponding note -->
         {#await promise then res}
             {#each res as el}
-                <div class="sidebar-links">
+                <div class="sidebar-links note-not-loaded">
                     <button on:click={() => {loadNoteFromMongo(el[1])}}>
                         {el[1]}
                     </button>
@@ -353,7 +367,7 @@
     <div class="primary-area">
 
         <div class="textarea-controls">
-            <button class="save">Save</button>
+            <button class="save" on:click={updateNote}>Save</button>
             <button class="save" on:click={addNewNote}>Add</button>
             <input placeholder="Name: " class="note-name">
         </div>
