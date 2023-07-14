@@ -157,8 +157,8 @@
 </style>
 
 <script >
+    import ConfirmationModal from "./ConfirmationModal.svelte";
     import { onMount } from "svelte";
-	
     
     // Sidebar links fetchers
     async function loadSidebarLinks() {
@@ -333,7 +333,10 @@
             })
         });
     }
-    
+
+    function alert() {
+        document.querySelector('#modal-wrapper')?.classList.add('active')
+    }
 </script>
 
 <div class="home-main">
@@ -368,20 +371,15 @@
 
         <div class="textarea-controls">
             <button class="save" on:click={updateNote}>Save</button>
+            <button class="save" id="confirmation-modal-trigger" on:click={alert}>Delete</button>
             <button class="save" on:click={addNewNote}>Add</button>
             <input placeholder="Name: " class="note-name">
         </div>
         
         <textarea class="textarea" style="resize: none" rows="30"></textarea>
 
+        <ConfirmationModal />
         <!-- 
-            TODO
-            1. Save contents of textarea into a file or something
-            2. Send the file to mongo or another db (or send raw text to mongo)
-            3. Load a file into the textarea
-            4. Overwrite the file with changes in the textarea
-        
-        
         
         -->
     </div>

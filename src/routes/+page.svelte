@@ -1,6 +1,8 @@
-<script>
+<script src="../confirmationModal.js" >
     import Home from "./Home.svelte";
     import Login from "./Login.svelte";
+
+
 </script>
 
 <style global>

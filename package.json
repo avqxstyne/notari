@@ -15,6 +15,7 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.5.0",
+		"@types/jquery": "^3.5.16",
 		"prettier": "^2.8.0",
 		"prettier-plugin-svelte": "^2.8.1",
 		"sass": "^1.62.1",
@@ -26,6 +27,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"bootbox": "^6.0.0",
 		"hamburgers": "^1.2.1"
 	}
 }
