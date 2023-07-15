@@ -1,33 +1,26 @@
 <style lang="scss">
-    #modal-wrapper {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: rgba(0, 0, 0, 0.2);
-    text-align: center;
-    padding-top: 30px;
-    display: none;
-    transition: 0.5s ease all;
-    z-index: 99999;
-    
-    &.active {
-        display: block;
-        
-        #modal-confirmation {
-            margin-top: 0;
-            opacity: 1;
-        }
+        $red-1: rgba(96, 31, 31, 0.6);
+
+    .modal-wrapper {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.2);
+        text-align: center;
+        padding-top: 10rem;
+        display: none;
+        transition: 0.5s ease all;
+        z-index: 99999;
     }
-}
 
 #modal-confirmation {
     display: inline-block;
     margin-top: -30px;
-    opacity: 0;
+    opacity: 1;
 	max-width: 400px;
 	border-radius: 4px;
 	overflow: hidden;
@@ -39,7 +32,7 @@
 
 #modal-header {
     position: relative;
-	background: #ff6b6b;
+	background: $red-1;
 	padding: 15px;
 	color: #fff;
     text-align: left;
@@ -94,28 +87,39 @@
 }
 
 #modal-button-yes {
-    border: 2px solid #ff6b6b;
+    outline: 2px solid $red-1;
     padding: 10px 50px;
-    background: #ff6b6b;
+    background: $red-1;
     color: #fff;
     font-weight: bold;
     border-radius: 4px;
     cursor: pointer;
     transition: 0.5s ease all;
     margin-left: 10px;
+    border: none;
     
     &:hover {
-        border: 2px solid darken(#ff6b6b, 8%);
-        background: darken(#ff6b6b, 8%);
+        background: white;
+        color: $red-1;
     }
 }
+
 </style>
 
 <script>
-
+    function displayModal() {
+        let buttons = document.getElementsByClassName('modal-action');
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].addEventListener("click", () => {
+                // @ts-ignore
+                document.querySelector('.modal-wrapper').style.display = "none";
+            })
+        }
+    }
+   
 </script>
 
-<div id="modal-wrapper">
+<div class="modal-wrapper">
     <div id="modal-confirmation">
         <div id="modal-header">
             <h3>
@@ -127,11 +131,11 @@
             </span>
         </div>
         <div id="modal-content">
-            <p> + text + </p>
+            <p> Are you sure you want to delete this note? You will not be able to recover it later. </p>
         </div>
         <div id="modal-buttons">
-            <button class="modal-action" data-confirm=0 id="modal-button-no">No</button>
-            <button class="modal-action" data-confirm=1 id="modal-button-yes">Yes</button>
+            <button class="modal-action" on:click={displayModal} data-confirm=0 id="modal-button-no">No</button>
+            <button class="modal-action" on:click={displayModal} data-confirm=1 id="modal-button-yes">Yes</button>
         </div>
     </div>
 </div>

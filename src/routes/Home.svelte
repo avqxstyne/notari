@@ -63,8 +63,6 @@
                 background-color: $white-1;
                 &:hover {background-color: rgba($color: $white-2, $alpha: 0.3);}
 
-                
-
                 button {
                     width: 100%;
                     max-width: 100%;
@@ -111,10 +109,7 @@
                 padding: 1rem;
                 box-sizing: border-box;
             }
-
         }
-
-        
     }
 
     .save {
@@ -335,7 +330,9 @@
     }
 
     function alert() {
-        document.querySelector('#modal-wrapper')?.classList.add('active')
+        // @ts-ignore
+        document.querySelector('.modal-wrapper').style.display = "block";
+        console.log("bruh")
     }
 </script>
 
