@@ -1,5 +1,5 @@
 <style lang="scss">
-        $red-1: rgba(96, 31, 31, 0.6);
+    $red-1: rgba(96, 31, 31, 0.6);
 
     .modal-wrapper {
         position: fixed;
@@ -17,106 +17,116 @@
         z-index: 99999;
     }
 
-#modal-confirmation {
-    display: inline-block;
-    margin-top: -30px;
-    opacity: 1;
-	max-width: 400px;
-	border-radius: 4px;
-	overflow: hidden;
-	box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-    background: #fff;
-    text-align: left;
-    transition: 0.5s ease all;
-}
+    #modal-confirmation {
+        display: inline-block;
+        margin-top: -30px;
+        opacity: 1;
+        max-width: 400px;
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+        background: #fff;
+        text-align: left;
+        transition: 0.5s ease all;
+    }
 
-#modal-header {
-    position: relative;
-	background: $red-1;
-	padding: 15px;
-	color: #fff;
-    text-align: left;
-
-	h3 {
-		font-weight: 300;
-		margin: 0;
-	}
-}
-
-#modal-close {
-    position: absolute;
-    right: 15px;
-    top: 12px;
-    font-size: 1.5em;
-    cursor: pointer;
-    color: #bd3d3d;
-    
-    &:hover {
+    #modal-header {
+        position: relative;
+        background: $red-1;
+        padding: 15px;
         color: #fff;
+        text-align: left;
+
+        h3 {
+            font-weight: 300;
+            margin: 0;
+        }
     }
-}
 
-#modal-content {
-	padding: 30px 15px;  
-  
-	p {
-		margin: 0;
-		color: #61686e;
-	}
-}
+    #modal-close {
+        position: absolute;
+        right: 15px;
+        top: 12px;
+        font-size: 1.5em;
+        cursor: pointer;
+        color: #bd3d3d;
+        
+        &:hover {
+            color: #fff;
+        }
+    }
 
-#modal-buttons {
-    padding: 0 15px 15px 15px;
-    text-align: right;
-}
-
-#modal-button-no {
-    border: 2px solid #98a1a9;
-    padding: 10px 30px;
-    background: #fff;
-    color: #98a1a9;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: 0.5s ease all;
+    #modal-content {
+        padding: 30px 15px;  
     
-    &:hover {
-        background: #98a1a9;
+        p {
+            margin: 0;
+            color: #61686e;
+        }
+    }
+
+    #modal-buttons {
+        padding: 0 15px 15px 15px;
+        text-align: right;
+    }
+
+    #modal-button-no {
+        border: 2px solid #98a1a9;
+        padding: 10px 30px;
+        background: #fff;
+        color: #98a1a9;
+        font-weight: bold;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: 0.5s ease all;
+        
+        &:hover {
+            background: #98a1a9;
+            color: #fff;
+        }
+    }
+
+    #modal-button-yes {
+        outline: 2px solid $red-1;
+        padding: 10px 50px;
+        background: $red-1;
         color: #fff;
+        font-weight: bold;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: 0.5s ease all;
+        margin-left: 10px;
+        border: none;
+        
+        &:hover {
+            background: white;
+            color: $red-1;
+        }
     }
-}
-
-#modal-button-yes {
-    outline: 2px solid $red-1;
-    padding: 10px 50px;
-    background: $red-1;
-    color: #fff;
-    font-weight: bold;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: 0.5s ease all;
-    margin-left: 10px;
-    border: none;
-    
-    &:hover {
-        background: white;
-        color: $red-1;
-    }
-}
 
 </style>
 
 <script>
-    function displayModal() {
-        let buttons = document.getElementsByClassName('modal-action');
-        for (let i = 0; i < buttons.length; i++) {
-            buttons[i].addEventListener("click", () => {
-                // @ts-ignore
-                document.querySelector('.modal-wrapper').style.display = "none";
+
+    import { loadSidebarLinks } from "../functions/functions";
+
+    async function deleteNote() {
+        const endpoint = "http://localhost:5171/deletenote";
+
+        // @ts-ignore
+        var noteName = document.querySelector('.note-is-loaded').innerText;
+
+		const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                notename: noteName
             })
-        }
+		});
+        
+
     }
-   
+
 </script>
 
 <div class="modal-wrapper">
@@ -134,8 +144,8 @@
             <p> Are you sure you want to delete this note? You will not be able to recover it later. </p>
         </div>
         <div id="modal-buttons">
-            <button class="modal-action" on:click={displayModal} data-confirm=0 id="modal-button-no">No</button>
-            <button class="modal-action" on:click={displayModal} data-confirm=1 id="modal-button-yes">Yes</button>
+            <button class="modal-action" data-confirm=0 id="modal-button-no">No</button>
+            <button class="modal-action" on:click={deleteNote} data-confirm=1 id="modal-button-yes">Yes</button>
         </div>
     </div>
 </div>
