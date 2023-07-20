@@ -124,6 +124,28 @@
             })
 		});
         
+        /**
+         * @type {any[][]}
+         */
+        let sidebarArray = [];
+        Promise.resolve(loadSidebarLinks()).then((value) => {
+            sidebarArray = value;
+        });
+
+            let linkContainer = document.createElement('div');
+            for (let i = 0; i < sidebarArray.length; i++) {
+                let link = document.createElement('div');
+                link.setAttribute('class', 'note-not-loaded');
+                link.setAttribute('class', 'sidebar-links');
+                link.appendChild(document.createElement('button').innerHTML = sidebarArray[i][1]);
+                linkContainer.appendChild(link);
+            }
+            setTimeout(() => {
+                document.getElementById("ok")?.replaceWith( linkContainer);
+
+            }, 1000);
+        
+
 
     }
 

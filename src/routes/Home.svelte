@@ -93,8 +93,14 @@
 </style>
 
 <script >
+// @ts-nocheck
+
+	import { loadSidebarLinks } from "../functions/functions";
     import ConfirmationModal from "./ConfirmationModal.svelte";
 	import Sidebar from "./Sidebar.svelte";
+
+  
+    let promise = loadSidebarLinks()
 
     async function addNewNote() {
         // @ts-ignore
@@ -151,10 +157,13 @@
         document.querySelector('.modal-wrapper').style.display = "block";
     }
 
+    console.log()
+
 </script>
 
 <div class="home-main">
-    <Sidebar />
+    
+    <Sidebar mytext="hello"/>
     <div class="primary-area">
 
         <div class="textarea-controls">

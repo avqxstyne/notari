@@ -79,7 +79,6 @@
 <script>
     import { loadSidebarLinks, loadNoteFromMongo } from "../functions/functions";    
     import { onMount } from "svelte";
-
     
     /**
 	 * @type {any[][]}
@@ -130,7 +129,7 @@
 <div class="sidebar">
 
     <div class="header-container">
-        <h1 class="header">Notari</h1>
+        <h1 class="header" id="ok">Notari</h1>
         <div class="hamburger hamburger--collapse is-active">
             <div class="hamburger-box">
                 <div class="hamburger-inner"></div>
@@ -144,7 +143,7 @@
     When each link is clicked it loads the corresponding note -->
     {#await sidebarArray then res}
         {#each res as el}
-            <div class="sidebar-links note-not-loaded">
+            <div class="sidebar-links note-not-loaded" >
                 <button on:click={() => {loadNoteFromMongo(el[1])}}>
                     {el[1]}
                 </button>
