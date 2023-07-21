@@ -1,7 +1,7 @@
 <style lang="scss">
     $red-1: rgba(96, 31, 31, 0.6);
 
-    .modal-wrapper {
+    .alert-wrapper {
         position: fixed;
         width: 100%;
         height: 100%;
@@ -103,47 +103,27 @@
             color: $red-1;
         }
     }
-
 </style>
 
 <script>
 
-    import { loadSidebarLinks } from "../functions/functions";
-
-    async function deleteNote() {
-        const endpoint = "http://localhost:5171/deletenote";
-
-        // @ts-ignore
-        var noteName = document.querySelector('.note-is-loaded').innerText;
-
-		const response = await fetch(endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                notename: noteName
-            })
-		}); 
-    }
-
 </script>
 
-<div class="modal-wrapper">
+<div class="alert-wrapper">
     <div id="modal-confirmation">
         <div id="modal-header">
             <h3>
                 <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
-                 Confirm Delete
+                 Success!
             </h3>
             <span data-confirm=0 class="modal-action" id="modal-close">
                 <i class="fa fa-times" aria-hidden="true"></i>
             </span>
         </div>
         <div id="modal-content">
-            <p> Are you sure you want to delete this note? You will not be able to recover it later. </p>
+            <p> Note has been added to the database. </p>
         </div>
-        <div id="modal-buttons">
-            <button class="modal-action" data-confirm=0 id="modal-button-no">No</button>
-            <button class="modal-action" on:click={deleteNote} data-confirm=1 id="modal-button-yes">Yes</button>
-        </div>
+        <button class="modal-action" data-confirm=0 id="modal-button-no">Ok</button>
+
     </div>
 </div>

@@ -69,6 +69,10 @@
             background-color: rgba($red-1, 0.4);
         }
 
+        &:active {
+            transform: scale(0.9)
+        }
+
     }
 
     .textarea-controls {
@@ -96,6 +100,7 @@
 // @ts-nocheck
 
 	import { loadSidebarLinks } from "../functions/functions";
+	import AlertModal from "./AlertModal.svelte";
     import ConfirmationModal from "./ConfirmationModal.svelte";
 	import Sidebar from "./Sidebar.svelte";
 
@@ -121,6 +126,8 @@
                 fileName: noteName
             })
         });
+        // @ts-ignore
+        document.querySelector('.alert-wrapper').style.display = "block";
 	};
     
     async function updateNote() {
@@ -176,6 +183,7 @@
         <textarea class="textarea" style="resize: none" rows="30"></textarea>
 
         <ConfirmationModal />
+        <AlertModal />
         <!-- 
         
         -->
