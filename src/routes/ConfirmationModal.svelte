@@ -104,6 +104,13 @@
         }
     }
 
+    .modal-action {
+        &:active {
+            transform: scale(0.9)
+        }
+
+    }
+
 </style>
 
 <script>

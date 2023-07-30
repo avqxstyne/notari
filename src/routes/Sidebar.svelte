@@ -85,6 +85,7 @@
 	 */
      let sidebarArray = [];
     Promise.resolve(loadSidebarLinks()).then((value) => {
+        // @ts-ignore
         sidebarArray = value;
     })
 

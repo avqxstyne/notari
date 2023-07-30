@@ -126,8 +126,8 @@
                 fileName: noteName
             })
         });
-        // @ts-ignore
-        document.querySelector('.alert-wrapper').style.display = "block";
+        let alert = credentialSender.json();
+        if (alert.status = "good") document.querySelector('.alert-wrapper').style.display = "block";
 	};
     
     async function updateNote() {

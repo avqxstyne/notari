@@ -1,19 +1,26 @@
 export async function loadSidebarLinks() {
-    const endpoint = "http://localhost:5171/getsidebar";
+    try {
 
-    const response = await fetch(endpoint, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json'}
-        }
-    );
-    const data = await response.json();
-    // const data2 = data.text();
-    var result = [];
+        const endpoint = "http://localhost:5171/getsidebar";
 
-    for(var i in data)
-        result.push([i, data [i]]);
-    
-    return result;
+        const response = await fetch(endpoint, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json'}
+            }
+        );
+        const data = await response.json();
+        // const data2 = data.text();
+        var result = [];
+
+        for(var i in data)
+            result.push([i, data [i]]);
+        
+        return result;
+    } catch(e) {
+        console.log(e);
+        console.error(e);
+    }
+
 };
 
 // @ts-ignore
