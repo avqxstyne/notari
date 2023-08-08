@@ -64,6 +64,8 @@
         font-size: 1rem;
         font-family: inherit;
 
+        text-align: center;
+
         transition: 0.2s;
         &:hover {
             background-color: rgba($red-1, 0.4);
@@ -86,7 +88,7 @@
         input {
             background-color: $white-1;
             border-radius: 0.5rem;
-            padding: 0.25rem 0rem;
+            padding: 0.2rem 0rem 0.6rem 0rem;
             color: $text-color;
             border: none;
             outline: none;
