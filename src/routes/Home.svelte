@@ -86,14 +86,16 @@
         gap: 0.25rem;
 
         input {
-            background-color: $white-1;
-            border-radius: 0.5rem;
-            padding: 0.2rem 0rem 0.6rem 0rem;
+            background-color: transparent;
+            width: 5rem;
+            padding: 0rem 0rem 0rem 0rem;
             color: $text-color;
             border: none;
             outline: none;
-            // border-left: 2px solid $red-1;
+            border-bottom: 2px solid #601f1f;
             font-size: 1rem;
+
+            margin-bottom: 0.2rem;
         }
     }
 </style>
@@ -152,6 +154,8 @@
                 fileName: noteName
             })
         });
+        
+
     }
 
     function displayModal() {
